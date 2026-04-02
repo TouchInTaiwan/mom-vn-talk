@@ -52,7 +52,8 @@
 <body>
 
     <h1>媽媽助手</h1>
-    <p style="color: gray; font-size: 12px;">版本：v1.3 (skipWaiting)</p>
+    <p style="color: gray; font-size: 12px;">版本：v1.4 (全自動更新模式)</p>
+    
     <div class="grid-container">
         <button class="btn btn-top-red" onclick="speak('Tìm y tá giúp tôi', this.innerText)">找護理師</button>
         <button class="btn btn-top-green" onclick="speak('Cảm ơn bạn', this.innerText)">謝謝你</button>
@@ -101,27 +102,35 @@
 
     <script>
         function speak(vnText, zhText) {
-            // 停止之前的語音，避免重疊
             window.speechSynthesis.cancel();
-
-            // 1. 中文語音 (媽媽確認音)
             const zhUtterance = new SpeechSynthesisUtterance(zhText);
             zhUtterance.lang = 'zh-TW';
             zhUtterance.rate = 1.0;
-
-            // 2. 越南語音 (護理人員溝通音)
             const vnUtterance = new SpeechSynthesisUtterance(vnText);
             vnUtterance.lang = 'vi-VN';
             vnUtterance.rate = 0.75; 
-
-            // 將語音加入隊列
             window.speechSynthesis.speak(zhUtterance);
             window.speechSynthesis.speak(vnUtterance);
         }
 
+        // 自動更新邏輯
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
-                navigator.serviceWorker.register('./sw.js').catch(() => {});
+                // 在 URL 後面加上時間戳記，繞過 Safari 的 24 小時快取限制
+                navigator.serviceWorker.register('./sw.js?v=' + Date.now())
+                .then(reg => {
+                    console.log('服務工作人員已註冊');
+                }).catch(err => {
+                    console.log('註冊失敗：', err);
+                });
+            });
+
+            // 關鍵：偵測到新版 Service Worker 激活時，自動重整頁面
+            let refreshing = false;
+            navigator.serviceWorker.addEventListener('controllerchange', () => {
+                if (refreshing) return;
+                window.location.reload();
+                refreshing = true;
             });
         }
     </script>
