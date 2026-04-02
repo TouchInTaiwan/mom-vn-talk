@@ -7,6 +7,7 @@
     <style>
         body { font-family: -apple-system, sans-serif; background-color: #f4f7f9; margin: 0; padding: 15px; padding-bottom: 60px; display: flex; flex-direction: column; align-items: center; }
         h1 { color: #333; margin: 10px 0; font-size: 22px; }
+        .version-tag { color: gray; font-size: 12px; margin-bottom: 10px; }
         .section-title { 
             grid-column: span 2; 
             font-size: 20px; 
@@ -52,8 +53,8 @@
 <body>
 
     <h1>媽媽助手</h1>
-    <p style="color: gray; font-size: 12px;">版本：v1.4 (全自動更新模式)</p>
-    
+    <div class="version-tag">穩定版 v1.4</div>
+
     <div class="grid-container">
         <button class="btn btn-top-red" onclick="speak('Tìm y tá giúp tôi', this.innerText)">找護理師</button>
         <button class="btn btn-top-green" onclick="speak('Cảm ơn bạn', this.innerText)">謝謝你</button>
@@ -101,31 +102,38 @@
     </div>
 
     <script>
+        // 語音功能
         function speak(vnText, zhText) {
             window.speechSynthesis.cancel();
+            
+            // 中文確認音
             const zhUtterance = new SpeechSynthesisUtterance(zhText);
             zhUtterance.lang = 'zh-TW';
             zhUtterance.rate = 1.0;
+
+            // 越南語溝通音
             const vnUtterance = new SpeechSynthesisUtterance(vnText);
             vnUtterance.lang = 'vi-VN';
             vnUtterance.rate = 0.75; 
+
             window.speechSynthesis.speak(zhUtterance);
             window.speechSynthesis.speak(vnUtterance);
         }
 
-        // 自動更新邏輯
+        // PWA 自動更新邏輯
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
-                // 在 URL 後面加上時間戳記，繞過 Safari 的 24 小時快取限制
-                navigator.serviceWorker.register('./sw.js?v=' + Date.now())
+                // 使用固定的版本號標籤，防止無限循環重整
+                // 下次改版記得將 v=1.4 手動改為 v=1.5
+                navigator.serviceWorker.register('./sw.js?v=1.4')
                 .then(reg => {
-                    console.log('服務工作人員已註冊');
-                }).catch(err => {
-                    console.log('註冊失敗：', err);
+                    console.log('SW 註冊成功');
+                    // 當 App 從背景回到前景時檢查更新
+                    reg.update();
                 });
             });
 
-            // 關鍵：偵測到新版 Service Worker 激活時，自動重整頁面
+            // 偵測到新管家接管時，自動刷新頁面一次
             let refreshing = false;
             navigator.serviceWorker.addEventListener('controllerchange', () => {
                 if (refreshing) return;

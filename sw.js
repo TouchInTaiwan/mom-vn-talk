@@ -1,22 +1,30 @@
 // sw.js
+const CACHE_NAME = 'mom-app-v1.4'; // <--- 下次改版手動改這裡
+
 self.addEventListener('install', (e) => {
   // 強制讓新的 Service Worker 安裝完後立即進入 active 狀態
   self.skipWaiting(); 
   
   e.waitUntil(
-    // 每次更新代碼，建議手動升級這個版本號 (例如 v1.4)
-    caches.open('mom-app-v1.4').then((cache) => cache.addAll([
+    caches.open(CACHE_NAME).then((cache) => cache.addAll([
       './',
       './index.html'
     ]))
   );
 });
 
-// 當新的 Service Worker 啟用時，立刻接管所有頁面控制權
+// 當新的 Service Worker 啟用時，清理舊快取並立刻接管頁面
 self.addEventListener('activate', (e) => {
-  e.waitUntil(clients.claim()); 
+  e.waitUntil(
+    caches.keys().then((keys) => {
+      return Promise.all(
+        keys.filter(key => key !== CACHE_NAME).map(key => caches.delete(key))
+      );
+    }).then(() => self.clients.claim())
+  );
 });
 
+// 攔截請求，優先從快取讀取，確保離線可用
 self.addEventListener('fetch', (e) => {
   e.respondWith(
     caches.match(e.request).then((response) => response || fetch(e.request))
