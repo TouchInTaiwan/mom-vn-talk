@@ -1,5 +1,5 @@
 // sw.js
-const CACHE_NAME = 'mom-app-v1.4'; // <--- 下次改版手動改這裡
+const CACHE_NAME = 'mom-app-v1.5'; // <--- 下次改版手動改這裡
 
 self.addEventListener('install', (e) => {
   // 強制讓新的 Service Worker 安裝完後立即進入 active 狀態
