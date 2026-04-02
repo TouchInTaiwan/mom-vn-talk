@@ -5,24 +5,36 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>媽媽助手</title>
     <style>
-        body { font-family: sans-serif; background-color: #f0f2f5; margin: 0; padding: 20px; display: flex; flex-direction: column; align-items: center; }
-        h1 { color: #333; margin-bottom: 20px; }
+        body { font-family: -apple-system, sans-serif; background-color: #f4f7f9; margin: 0; padding: 15px; padding-bottom: 60px; display: flex; flex-direction: column; align-items: center; }
+        h1 { color: #333; margin: 10px 0; font-size: 22px; }
+        .section-title { 
+            grid-column: span 2; 
+            font-size: 20px; 
+            color: #444; 
+            margin-top: 25px; 
+            margin-bottom: 8px;
+            padding-left: 12px;
+            border-left: 6px solid #007AFF;
+            text-align: left;
+            width: 100%;
+            font-weight: bold;
+        }
         .grid-container {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 20px;
+            gap: 12px;
             width: 100%;
             max-width: 600px;
         }
         .btn {
-            aspect-ratio: 1 / 1;
+            aspect-ratio: 1.3 / 1;
             background-color: #007AFF;
             color: white;
             border: none;
-            border-radius: 20px;
-            font-size: 28px;
+            border-radius: 16px;
+            font-size: 20px;
             font-weight: bold;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+            box-shadow: 0 4px 6px rgba(0,0,0,0.12);
             cursor: pointer;
             display: flex;
             justify-content: center;
@@ -30,20 +42,63 @@
             padding: 10px;
             text-align: center;
         }
-        .btn:active { background-color: #0051a8; transform: scale(0.95); }
+        /* 置頂特殊顏色 */
+        .btn-top-red { background-color: #FF3B30; grid-column: span 1; } /* 找護理師 */
+        .btn-top-green { background-color: #34C759; grid-column: span 1; } /* 謝謝你 */
+        .btn-top-warn { background-color: #FF9500; grid-column: span 2; aspect-ratio: 4 / 1; } /* 我很喘 (佔滿兩格寬) */
+        
+        .btn-part { background-color: #8E8E93; } /* 身體部位用灰色 */
+        .btn:active { opacity: 0.6; transform: scale(0.96); }
     </style>
 </head>
 <body>
 
-    <h1>媽媽專用助手</h1>
+    <h1>媽媽助手</h1>
 
     <div class="grid-container">
-        <button class="btn" onclick="speak('Con đói bụng')">我肚子餓</button>
-        <button class="btn" onclick="speak('Muốn uống nước')">想喝水</button>
-        <button class="btn" onclick="speak('Cảm ơn')">謝謝</button>
-        <button class="btn" onclick="speak('Con muốn nghỉ ngơi')">想休息</button>
-        <button class="btn" onclick="speak('Đi vệ sinh')">去廁所</button>
-        <button class="btn" onclick="speak('Con yêu mẹ')">我愛妳</button>
+        <button class="btn btn-top-red" onclick="speak('Tìm y tá giúp tôi')">找護理師</button>
+        <button class="btn btn-top-green" onclick="speak('Cảm ơn bạn')">謝謝你</button>
+        <button class="btn btn-top-warn" onclick="speak('Tôi thấy khó thở, cho tôi nghỉ một chút')">我很喘，讓我休息一下</button>
+
+        <div class="section-title">身體需求</div>
+        <button class="btn" onclick="speak('Nâng đầu giường lên')">調高床頭</button>
+        <button class="btn" onclick="speak('Hạ đầu giường xuống')">調低床頭</button>
+        <button class="btn" onclick="speak('Lật người giúp tôi')">幫我翻身</button>
+        <button class="btn" onclick="speak('Tôi bị đau mông')">我屁股痛</button>
+        <button class="btn" onclick="speak('Tôi muốn đi vệ sinh, kéo rèm giúp tôi')">上廁所/拉簾</button>
+        <button class="btn" onclick="speak('Tôi khó tiểu, nhấn bụng giúp tôi')">尿不出/壓一下</button>
+        <button class="btn" onclick="speak('Hút đờm giúp tôi')">幫我抽痰</button>
+        <button class="btn" onclick="speak('Thay tã giúp tôi')">幫我換尿布</button>
+        <button class="btn" onclick="speak('Tôi thấy nóng, lấy mền ra')">熱/拿開被子</button>
+        <button class="btn" onclick="speak('Tôi thấy lạnh, đắp mền giúp tôi')">冷/蓋上被子</button>
+        <button class="btn" onclick="speak('Nói lớn hơn một chút')">講話大聲點</button>
+        <button class="btn" onclick="speak('Nói nhỏ lại một chút')">講話小聲點</button>
+
+        <div class="section-title">需要物品</div>
+        <button class="btn" onclick="speak('Lấy mắt kính giúp tôi')">我要眼鏡</button>
+        <button class="btn" onclick="speak('Lấy cuốn sổ giúp tôi')">我要筆記本</button>
+        <button class="btn" onclick="speak('Lấy cuốn sổ khác giúp tôi')">另一本筆記本</button>
+        <button class="btn" onclick="speak('Lấy cây bút giúp tôi')">我要筆</button>
+        <button class="btn" onclick="speak('Lấy cây bút khác giúp tôi')">另一隻筆</button>
+
+        <div class="section-title">找人</div>
+        <button class="btn" onclick="speak('Tìm dì giúp tôi')">幫我找阿姨</button>
+        <button class="btn" onclick="speak('Tìm con gái tôi giúp tôi')">幫我找女兒</button>
+        <button class="btn" onclick="speak('Tìm con trai tôi giúp tôi')">幫我找兒子</button>
+
+        <div class="section-title">復健與護理</div>
+        <button class="btn" onclick="speak('Thoa son dưỡng môi giúp tôi')">擦護唇膏</button>
+        <button class="btn" onclick="speak('Tôi khát nước, muốn súc miệng')">口渴/要漱口</button>
+        <button class="btn" onclick="speak('Tập tay giúp tôi')">帶著復健手</button>
+        <button class="btn" onclick="speak('Tập chân giúp tôi')">帶著復健腳</button>
+
+        <div class="section-title">身體部位</div>
+        <button class="btn btn-part" onclick="speak('Đầu')">頭</button>
+        <button class="btn btn-part" onclick="speak('Tay')">手</button>
+        <button class="btn btn-part" onclick="speak('Bụng')">肚子</button>
+        <button class="btn btn-part" onclick="speak('Bàng quang')">膀胱</button>
+        <button class="btn btn-part" onclick="speak('Đùi')">腿</button>
+        <button class="btn btn-part" onclick="speak('Bàn chân')">腳</button>
     </div>
 
     <script>
@@ -51,7 +106,7 @@
             window.speechSynthesis.cancel();
             const utterance = new SpeechSynthesisUtterance(text);
             utterance.lang = 'vi-VN';
-            utterance.rate = 0.8;
+            utterance.rate = 0.75; 
             window.speechSynthesis.speak(utterance);
         }
 
