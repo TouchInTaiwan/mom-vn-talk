@@ -1,6 +1,6 @@
 self.addEventListener('install', (e) => {
   e.waitUntil(
-    caches.open('mom-app-v1').then((cache) => cache.addAll([
+    caches.open('mom-app-v1.1').then((cache) => cache.addAll([
       './',
       './index.html'
     ]))
